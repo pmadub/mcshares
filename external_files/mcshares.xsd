@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="RequestDoc">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Doc_Date" type="xsd:string" />
+        <xsd:element name="Doc_Ref" type="xsd:string" />
+        <xsd:element name="Doc_Data">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element maxOccurs="unbounded" name="DataItem_Customer">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="customer_id" type="xsd:string" />
+                    <xsd:element name="Customer_Type" type="xsd:string" />
+                    <xsd:element name="Date_Of_Birth" type="xsd:string" />
+                    <xsd:element name="Date_Incorp" type="xsd:string" />
+                    <xsd:element minOccurs="0" name="Registration_No" type="xsd:string" />
+                    <xsd:element minOccurs="0" name="REGISTRATION_NO" />
+                    <xsd:element name="Mailing_Address">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Address_Line1" type="xsd:string" />
+                          <xsd:element name="Address_Line2" type="xsd:string" />
+                          <xsd:element name="Town_City" type="xsd:string" />
+                          <xsd:element name="Country" type="xsd:string" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="Contact_Details">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Contact_Name" type="xsd:string" />
+                          <xsd:element name="Contact_Number" type="xsd:string" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="Shares_Details">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Num_Shares" type="nonNegativeInteger" />
+                          <xsd:element name="Share_Price" type="twoDecimalPlacesOnlySimpleType" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:simpleType name="twoDecimalPlacesOnlySimpleType" id="twoDecimalPlacesOnlySimpleType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:fractionDigits fixed="true" value="2" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="nonNegativeInteger" id="nonNegativeInteger">
+    <xsd:restriction base="xsd:integer">
+      <xsd:minInclusive value="0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>
