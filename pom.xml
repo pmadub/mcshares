@@ -9,8 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mcb</groupId>
-	<artifactId>mcshares-project</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>mcshares-service</artifactId>
+	<version>1.0.0.RELEASE</version>
 	<name>McSharesProject</name>
 	<description>Project for MCB McShares</description>
 	<properties>
@@ -107,6 +107,12 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>pranawmadubdocker/${project.artifactId}:${project.version}</name>
+					</image>
+					<pullPolicy>IF_NOT_PRESENT</pullPolicy>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
