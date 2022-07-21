@@ -195,7 +195,7 @@ public class CustomerController {
     @GetMapping("/customers/download_csv")
     public ResponseEntity<CustomersFileDownloadResponseEntity> downloadListOfCustomer(HttpServletResponse response,
                                                                                       @RequestParam(defaultValue = "0") int page,
-                                                                                      @RequestParam(defaultValue = "3") int size) {
+                                                                                      @RequestParam(defaultValue = "30") int size) {
 
         if(size > maximumPageSizeAllowedForDownload) {
             String message = MessageUtils.createMaximumPageSizeLimitBreachedMessages(size);

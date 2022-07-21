@@ -3,13 +3,13 @@ package com.mcb.mcsharesproject.utils;
 import java.text.MessageFormat;
 
 /**
- * This class is provide common message creation.
+ * This class is to provide common message creation.
  */
 public class MessageUtils {
     private static final String CUSTOMER_NOT_FOUND_MESSAGE = "customer with id = {0} has not being found";
     private static final String XML_FILE_CONTAIN_VALIDATION_ERROR = "{0} contains validation errors";
     private static final String FILE_HAS_BEEN_UPLOADED_SUCCESSFULLY = "{0} has been uploaded successfully, "
-                                                                      + " customers records has been stored";
+                                                                      + "customers records has been stored";
     private static final String PAGE_SIZE_BREACHED_MAXIMUM_LIMIT = " {0} is above the maximum limit authorised for the"
                                                                    + " page size ";
 

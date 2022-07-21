@@ -46,7 +46,7 @@ public class XmlIntegrationService {
     }
 
     /**
-     * This method to create a new schema from the xsd that is provided the project resources.
+     * This method to create a new schema from the xsd that is provided in the project resources.
      * The additional properties are added so as to prevent XML eXternal Entity injection (XXE).
      * @return
      * @throws IOException

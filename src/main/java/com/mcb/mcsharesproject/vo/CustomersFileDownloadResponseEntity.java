@@ -56,6 +56,14 @@ public class CustomersFileDownloadResponseEntity implements Serializable {
         this.numberOfCustomerRecords = numberOfCustomerRecords;
     }
 
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", CustomersFileDownloadResponseEntity.class.getSimpleName() + "[", "]").add(

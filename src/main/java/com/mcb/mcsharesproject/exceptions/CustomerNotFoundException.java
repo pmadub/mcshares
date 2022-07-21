@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.io.Serial;
 
 /**
- * This exception class extends McSharesApplicationRuntimeException class, it would allow
- * to send the client side 404 response withe error message.
+ * This exception class extends McSharesApplicationRuntimeException class, it sends to the client side
+ * a 404 response withe error message.
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class CustomerNotFoundException extends McSharesApplicationRuntimeException{
