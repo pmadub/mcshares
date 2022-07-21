@@ -4,6 +4,7 @@ import com.mcb.mcsharesproject.entities.customer.Customer;
 import com.mcb.mcsharesproject.enums.CustomerTypeEnum;
 import com.mcb.mcsharesproject.services.customer.CustomerCsvService;
 import com.mcb.mcsharesproject.services.customer.CustomerService;
+import com.mcb.mcsharesproject.services.file.FileLogService;
 import com.mcb.mcsharesproject.services.file.IFileStorageService;
 import com.mcb.mcsharesproject.services.log.LogService;
 import com.mcb.mcsharesproject.services.xml.XmlIntegrationService;
@@ -13,6 +14,7 @@ import com.mcb.mcsharesproject.xml.bindings.customer.MailingAddress;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +43,7 @@ public class CustomerController {
 
     @Autowired
     @Qualifier("uploadFileStorageBean")
-    private IFileStorageService fileStorageService;
+    private IFileStorageService uploadFileStorage;
 
     @Autowired
     private XmlIntegrationService xmlIntegrationService;
@@ -55,17 +57,29 @@ public class CustomerController {
     @Autowired
     private LogService logService;
 
+    @Autowired
+    private FileLogService fileLogService;
+
+    @Value("${download.maximum.page.size}")
+    private int maximumPageSizeAllowedForDownload;
+
     @PostMapping("/customers/upload")
-    public ResponseEntity<EntityResponseVO> processUploadedFile(@RequestParam("file") MultipartFile file) throws IOException {
-        fileStorageService.save(file);
-        Resource resource = fileStorageService.load(file.getOriginalFilename());
+    public ResponseEntity<CustomerFileUploadResponseEntity> processUploadedFile(@RequestParam("file") MultipartFile file)
+            throws IOException {
+        uploadFileStorage.save(file);
+        Resource resource = uploadFileStorage.load(file.getOriginalFilename());
         RequestDocUnmarshallingResult unmarshallResult;
         try {
             unmarshallResult = xmlIntegrationService.unmarshall(resource.getFile());
         } catch (JAXBException | SAXException e) {
-            return ResponseEntity.internalServerError().body(new EntityResponseVO(null, e.getMessage(),
-                                                                                  null));
+            log.error(" Exception occurred during unmarshall xml file ", e);
+            fileLogService.save(file.getOriginalFilename(), resource.getFile().getAbsolutePath(), false);
+            return ResponseEntity.internalServerError().body(new CustomerFileUploadResponseEntity(null, e.getMessage(),
+                                                                                                  null));
         }
+
+        fileLogService.save(file.getOriginalFilename(), resource.getFile().getAbsolutePath(),
+                            unmarshallResult.isSuccessful());
 
         if (!unmarshallResult.isSuccessful()) {
             unmarshallResult.getValidationErrors().forEach(error -> {
@@ -75,14 +89,16 @@ public class CustomerController {
                                                   error.getErrorMessage()));
             });
             return ResponseEntity.badRequest()
-                                 .body(new EntityResponseVO(unmarshallResult.getValidationErrors(),
-                                                            MessageUtils.createXmlFileContainValidationErrorMessage(file.getOriginalFilename()),
-                                                            null));
+                                 .body(new CustomerFileUploadResponseEntity(unmarshallResult.getValidationErrors(),
+                                                                            MessageUtils.createXmlFileContainValidationErrorMessage(
+                                                                    file.getOriginalFilename()),
+                                                                            null));
         }
 
         customerService.saveAllValidCustomerRecords(unmarshallResult.getRequestDoc());
 
-        return ResponseEntity.ok(new EntityResponseVO(MessageUtils.createXmlFileUploadSuccessful(file.getOriginalFilename())));
+        return ResponseEntity.ok(new CustomerFileUploadResponseEntity(
+                MessageUtils.createXmlFileUploadSuccessful(file.getOriginalFilename())));
     }
 
     @GetMapping("/customers")
@@ -180,6 +196,12 @@ public class CustomerController {
     public ResponseEntity<CustomersFileDownloadResponseEntity> downloadListOfCustomer(HttpServletResponse response,
                                                                                       @RequestParam(defaultValue = "0") int page,
                                                                                       @RequestParam(defaultValue = "3") int size) {
+
+        if(size > maximumPageSizeAllowedForDownload) {
+            String message = MessageUtils.createMaximumPageSizeLimitBreachedMessages(size);
+            return ResponseEntity.badRequest().body(new CustomersFileDownloadResponseEntity(message));
+        }
+
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=customers.csv");
 

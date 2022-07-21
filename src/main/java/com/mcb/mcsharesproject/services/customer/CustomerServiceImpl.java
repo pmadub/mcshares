@@ -70,7 +70,7 @@ public class CustomerServiceImpl implements CustomerService {
                                                     .map(CustomerXmlToEntityAdapter::convertToEntity)
                                                     .toList();
         customerRepository.saveAll(customerEntities);
-        log.info(" All customer entries in requestDoc has been converted in customer entries and saved");
+        log.info(" All entries in requestDoc has been converted in customer entities and saved");
     }
 
     @Override

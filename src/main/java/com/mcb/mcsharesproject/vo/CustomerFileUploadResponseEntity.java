@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class EntityResponseVO implements Serializable {
+public class CustomerFileUploadResponseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = -1193105238210086610L;
 
@@ -17,13 +17,13 @@ public class EntityResponseVO implements Serializable {
     private List<XsdValidationErrorVO> xsdValidationErrorList ;
     private String detailedMessage;
 
-    public EntityResponseVO(String message) {
+    public CustomerFileUploadResponseEntity(String message) {
         this.message = message;
     }
 
-    public EntityResponseVO(List<XsdValidationErrorVO> xsdValidationErrorList,
-                            String message,
-                            String detailedMessage) {
+    public CustomerFileUploadResponseEntity(List<XsdValidationErrorVO> xsdValidationErrorList,
+                                            String message,
+                                            String detailedMessage) {
         this.message = message;
         this.xsdValidationErrorList = xsdValidationErrorList;
         this.detailedMessage = detailedMessage;

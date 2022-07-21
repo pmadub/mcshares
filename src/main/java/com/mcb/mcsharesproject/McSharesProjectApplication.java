@@ -19,7 +19,7 @@ public class McSharesProjectApplication {
 		return args -> {
 			User user = new User();
 			user.setUserName("admin");
-			user.setName("ADMIN");
+			user.setName("admin");
 			user.setPassword("1234");
 			userService.saveUser(user);
 		};

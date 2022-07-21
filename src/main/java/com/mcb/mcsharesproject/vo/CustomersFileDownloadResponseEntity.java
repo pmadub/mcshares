@@ -1,6 +1,7 @@
 package com.mcb.mcsharesproject.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.StringJoiner;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomersFileDownloadResponseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = -5031116196481217148L;
@@ -18,10 +20,16 @@ public class CustomersFileDownloadResponseEntity implements Serializable {
 
     private long numberOfCustomerRecords;
 
+    private String error;
+
     public CustomersFileDownloadResponseEntity(String fileName, LocalDateTime timestamp, long numberOfCustomerRecords) {
         this.fileName = fileName;
         this.timestamp = timestamp;
         this.numberOfCustomerRecords = numberOfCustomerRecords;
+    }
+
+    public CustomersFileDownloadResponseEntity(String error) {
+        this.error = error;
     }
 
     public String getFileName() {

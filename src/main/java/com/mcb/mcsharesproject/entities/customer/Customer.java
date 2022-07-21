@@ -5,7 +5,6 @@ import com.mcb.mcsharesproject.dto.CustomerDetailsDTO;
 import com.mcb.mcsharesproject.enums.CustomerTypeEnum;
 
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -60,7 +59,6 @@ public class Customer implements Serializable {
     private String country;
 
     @Column(name = "NUMBER_OF_SHARES")
-    @Positive
     private int numberOfShares;
 
     @Column(name = "SHARE_PRICE")
